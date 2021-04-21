@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace IslandGatherers.Framework.Objects
 {
-    internal class ParrotPot : Chest
+    public class ParrotPot : Chest
     {
         private bool _isFull = false;
         private bool _ateCrops = false;

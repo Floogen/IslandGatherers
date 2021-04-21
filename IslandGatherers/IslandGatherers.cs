@@ -19,11 +19,11 @@ namespace IslandGatherers
 {
     public class IslandGatherers : Mod
     {
+        public static int parrotStorageID;
+
         internal static IMonitor monitor;
         internal static IModHelper modHelper;
         internal static ModConfig config;
-        internal static int parrotStorageID;
-
         internal static readonly string parrotPotFlag = "PeacefulEnd.IslandGatherers_IsParrotStorage";
 
         public override void Entry(IModHelper helper)

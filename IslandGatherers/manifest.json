@@ -6,7 +6,7 @@
   "UniqueID": "PeacefulEnd.IslandGatherers",
   "EntryDll": "IslandGatherers.dll",
   "MinimumApiVersion": "3.0.0",
-  "UpdateKeys": [ "Nexus:????" ],
+  "UpdateKeys": [ "Nexus:8552" ],
   "Dependencies": [
     {
       "UniqueID": "spacechase0.JsonAssets",
