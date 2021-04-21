@@ -111,11 +111,11 @@
   </PostBuildEventDependsOn>
     <PostBuildEvent>powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '@(VersionNumber)' | sc -LiteralPath \"$f\" })"
 
-powershell Remove-Item -Path '$(SolutionDir)releases\latest\$(SolutionName)\$(ProjectName)"' -Recurse -Force
-xcopy /s /y /i "$(TargetDir)" "$(SolutionDir)releases\latest\$(SolutionName)"
-7z a -tzip "$(SolutionDir)releases\$(SolutionName)-@(VersionNumber).zip" "$(SolutionDir)releases\latest\$(SolutionName)"
+powershell Remove-Item -Path '$(SolutionDir)releases\latest\$(ProjectName)\$(ProjectName)"' -Recurse -Force
+xcopy /s /y /i "$(TargetDir)" "$(SolutionDir)releases\latest\$(ProjectName)"
+7z a -tzip "$(SolutionDir)releases\$(ProjectName)-@(VersionNumber).zip" "$(SolutionDir)releases\latest\$(ProjectName)"
 
-xcopy /s /y /i "$(SolutionDir)releases\latest\$(SolutionName)" "$(GameModsPath)\$(SolutionName)"</PostBuildEvent>
+xcopy /s /y /i "$(SolutionDir)releases\latest\$(ProjectName)" "$(GameModsPath)\$(ProjectName)"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
