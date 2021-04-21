@@ -53,7 +53,7 @@ namespace IslandGatherers.Framework.Objects
             }
 
             // Show a "filled" sprite or not, based on if the Harvest Statues has items
-            spriteBatch.Draw(Game1.bigCraftableSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2(draw_x * 64f + (float)((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (draw_y - 1f) * 64f)), Game1.getSourceRectForStandardTileSheet(Game1.bigCraftableSpriteSheet, this.parentSheetIndex, 16, 32), this.tint.Value * alpha, 0f, Vector2.Zero, 4f, SpriteEffects.None, base_sort_order);
+            spriteBatch.Draw(Game1.bigCraftableSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2(draw_x * 64f + (float)((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (draw_y - 1f) * 64f)), Game1.getSourceRectForStandardTileSheet(Game1.bigCraftableSpriteSheet, this.items.Any() ? this.ParentSheetIndex + 1 : this.ParentSheetIndex, 16, 32), this.tint.Value * alpha, 0f, Vector2.Zero, 4f, SpriteEffects.None, base_sort_order);
         }
     }
 }
