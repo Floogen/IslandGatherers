@@ -22,9 +22,9 @@ namespace IslandGatherers
         internal static IMonitor monitor;
         internal static IModHelper modHelper;
         internal static ModConfig config;
-        internal static readonly string parrotPotFlag = "PeacefulEnd.IslandGatherers_IsParrotStorage";
+        internal static int parrotStorageID;
 
-        private int parrotStorageID;
+        internal static readonly string parrotPotFlag = "PeacefulEnd.IslandGatherers_IsParrotStorage";
 
         public override void Entry(IModHelper helper)
         {
@@ -42,6 +42,7 @@ namespace IslandGatherers
 
                 // Apply our patches
                 new ObjectPatch(monitor).Apply(harmony);
+                new IslandNorthPatch(monitor).Apply(harmony);
             }
             catch (Exception e)
             {
@@ -159,7 +160,7 @@ namespace IslandGatherers
 
         private void ConvertChestToParrotStorage(GameLocation location)
         {
-            foreach (Chest chest in location.Objects.Pairs.Where(p => p.Value is Chest).Select(p => p.Value))
+            foreach (Chest chest in location.Objects.Pairs.Where(p => p.Value is Chest).Select(p => p.Value).ToList())
             {
                 if (chest is ParrotPot || !chest.modData.ContainsKey(parrotPotFlag))
                 {
@@ -177,13 +178,13 @@ namespace IslandGatherers
                 location.setObject(chest.TileLocation, parrotPot);
 
                 // Gather any crops nearby
-                //parrotPot.HarvestCrops(location);
+                parrotPot.HarvestCrops(location);
             }
         }
 
         private void ConvertParrotStorageToChest(GameLocation location)
         {
-            foreach (ParrotPot parrotPot in location.Objects.Pairs.Where(p => p.Value is ParrotPot).Select(p => p.Value))
+            foreach (ParrotPot parrotPot in location.Objects.Pairs.Where(p => p.Value is ParrotPot).Select(p => p.Value).ToList())
             {
                 // Add the items from ParrotPot to temp Chest, so the player will still have their items if mod is uninstalled
                 Chest chest = new Chest(true, parrotPot.TileLocation);
