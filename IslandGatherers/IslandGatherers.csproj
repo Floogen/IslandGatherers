@@ -54,7 +54,9 @@
     <Compile Include="Framework\ApiManager.cs" />
     <Compile Include="Framework\AssetManager.cs" />
     <Compile Include="Framework\Interfaces\IExpandedStorageApi.cs" />
+    <Compile Include="Framework\Interfaces\IGenericModConfigMenuAPI.cs" />
     <Compile Include="Framework\Interfaces\IJsonAssetsApi.cs" />
+    <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Objects\ParrotPot.cs" />
     <Compile Include="Framework\Patches\ObjectPatch.cs" />
     <Compile Include="IslandGatherers.cs" />

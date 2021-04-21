@@ -20,6 +20,7 @@ namespace IslandGatherers.Framework.Objects
         public ParrotPot(Vector2 position, int itemID, bool enableHarvestMessage = true, bool doJunimosEatExcessCrops = true, bool doJunimosHarvestFromPots = true, bool doJunimosHarvestFromFruitTrees = true, bool doJunimosHarvestFromFlowers = true, bool doJunimosSowSeedsAfterHarvest = false, int minimumFruitOnTreeBeforeHarvest = 3) : base(true, position, itemID)
         {
             this.Name = "Parrot Pot";
+            this.modData[IslandGatherers.parrotPotFlag] = String.Empty;
 
             base.type.Value = "Crafting";
             base.bigCraftable.Value = true;
@@ -28,6 +29,14 @@ namespace IslandGatherers.Framework.Objects
             // Setting SpecialChestType to -1 so we can bypass Automate's default chest logic
             // TODO: Make this only happen if Automate is installed
             this.SpecialChestType = (SpecialChestTypes)(-1);
+        }
+
+        public void AddItems(IEnumerable<Item> items)
+        {
+            foreach (var item in items)
+            {
+                this.addItem(item);
+            }
         }
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)

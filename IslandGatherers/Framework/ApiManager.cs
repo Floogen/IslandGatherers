@@ -7,6 +7,7 @@ namespace IslandGatherers.Framework
     {
         private static IJsonAssetsApi jsonAssetsApi;
         private static IExpandedStorageApi expandedStorageApi;
+        private static IGenericModConfigMenuAPI genericModConfigMenuApi;
 
         internal static bool HookIntoJsonAssets(IModHelper helper)
         {
@@ -37,6 +38,20 @@ namespace IslandGatherers.Framework
             return true;
         }
 
+        public static bool HookIntoGMCM(IModHelper helper)
+        {
+            genericModConfigMenuApi = helper.ModRegistry.GetApi<IGenericModConfigMenuAPI>("spacechase0.GenericModConfigMenu");
+
+            if (genericModConfigMenuApi is null)
+            {
+                IslandGatherers.monitor.Log("Failed to hook into spacechase0.GenericModConfigMenu.", LogLevel.Error);
+                return false;
+            }
+
+            IslandGatherers.monitor.Log("Successfully hooked into spacechase0.GenericModConfigMenu.", LogLevel.Debug);
+            return true;
+        }
+
         internal static IJsonAssetsApi GetJsonAssetsApi()
         {
             return jsonAssetsApi;
@@ -45,6 +60,11 @@ namespace IslandGatherers.Framework
         internal static IExpandedStorageApi GetExpandedStorageApi()
         {
             return expandedStorageApi;
+        }
+
+        public static IGenericModConfigMenuAPI GetGMCMInterface()
+        {
+            return genericModConfigMenuApi;
         }
     }
 }
