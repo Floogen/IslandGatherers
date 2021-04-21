@@ -1,0 +1,16 @@
+﻿{
+  "Name": "Island Gatherers",
+  "Author": "PeacefulEnd",
+  "Version": "REPLACE_ME_WITH_VERSION",
+  "Description": "Harvests crops from Ginger Island using the power of parrots!",
+  "UniqueID": "PeacefulEnd.IslandGatherers",
+  "EntryDll": "IslandGatherers.dll",
+  "MinimumApiVersion": "3.0.0",
+  "UpdateKeys": [ "Nexus:????" ],
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.JsonAssets",
+      "IsRequired": true
+    }
+  ]
+}
