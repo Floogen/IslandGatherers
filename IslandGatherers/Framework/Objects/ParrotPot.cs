@@ -13,11 +13,11 @@ namespace IslandGatherers.Framework.Objects
 {
     public class ParrotPot : Chest
     {
-        private bool _isFull = false;
-        private bool _ateCrops = false;
-        private bool _harvestedToday = false;
-        private bool _hasSpawnedParrots = false;
-        private List<Vector2> _harvestedTiles = new List<Vector2>();
+        internal bool isFull = false;
+        internal bool ateCrops = false;
+        internal bool harvestedToday = false;
+        internal bool hasSpawnedParrots = false;
+        internal List<Vector2> harvestedTiles = new List<Vector2>();
 
         // Config related
         private bool _enableHarvestMessage = true;
@@ -89,20 +89,20 @@ namespace IslandGatherers.Framework.Objects
                 SearchForFruitTrees(location);
             }
 
-            if (_isFull)
+            if (isFull)
             {
                 Game1.showRedMessage($"The Parrots at the Ginger Island farm couldn't harvest due to lack of storage!");
                 return;
             }
 
             // Check if the Parrots ate the crops due to no inventory space
-            if (_ateCrops)
+            if (ateCrops)
             {
                 Game1.showRedMessage($"The Parrots at the Ginger Island farm ate harvested crops due to lack of storage!");
                 return;
             }
 
-            if (_harvestedToday && _enableHarvestMessage)
+            if (harvestedToday && _enableHarvestMessage)
             {
                 // Let the player know we harvested
                 Game1.addHUDMessage(new HUDMessage($"The Parrots at the Ginger Island farm have harvested crops.", 2));
@@ -147,7 +147,7 @@ namespace IslandGatherers.Framework.Objects
             {
                 if (!HasRoomForHarvest())
                 {
-                    _isFull = true;
+                    isFull = true;
                     return;
                 }
 
@@ -171,8 +171,8 @@ namespace IslandGatherers.Framework.Objects
 
                 // Crop exists and is fully grown, attempt to harvest it
                 crop.harvest((int)tile.X, (int)tile.Y, hoeDirt, null);
-                _harvestedToday = true;
-                _harvestedTiles.Add(tile);
+                harvestedToday = true;
+                harvestedTiles.Add(tile);
 
                 // Clear any non-renewing crop
                 if (crop.regrowAfterHarvest == -1)
@@ -194,19 +194,19 @@ namespace IslandGatherers.Framework.Objects
             {
                 if (!HasRoomForHarvest())
                 {
-                    _isFull = true;
+                    isFull = true;
                     return;
                 }
 
                 Vector2 tile = tileToForage.Key;
                 if (this.addItem(tileToForage.Value.getOne()) != null)
                 {
-                    _ateCrops = true;
+                    ateCrops = true;
                 }
 
                 tilesToRemove.Add(tile);
-                _harvestedToday = true;
-                _harvestedTiles.Add(tile);
+                harvestedToday = true;
+                harvestedTiles.Add(tile);
             }
 
             // Clean up the harvested forage products
@@ -220,7 +220,7 @@ namespace IslandGatherers.Framework.Objects
             {
                 if (!HasRoomForHarvest())
                 {
-                    _isFull = true;
+                    isFull = true;
                     return;
                 }
 
@@ -243,7 +243,7 @@ namespace IslandGatherers.Framework.Objects
                     }
 
                     hoeDirt.crop.harvest((int)tile.X, (int)tile.Y, hoeDirt, null);
-                    _harvestedToday = true;
+                    harvestedToday = true;
 
                     // Clear any non-renewing crop
                     if (hoeDirt.crop.regrowAfterHarvest == -1)
@@ -265,7 +265,7 @@ namespace IslandGatherers.Framework.Objects
             {
                 if (!HasRoomForHarvest())
                 {
-                    _isFull = true;
+                    isFull = true;
                     return;
                 }
 
@@ -276,11 +276,11 @@ namespace IslandGatherers.Framework.Objects
                 {
                     if (this.addItem(pot.heldObject.Value.getOne()) != null)
                     {
-                        _ateCrops = true;
+                        ateCrops = true;
                     }
 
                     pot.heldObject.Value = null;
-                    _harvestedToday = true;
+                    harvestedToday = true;
                 }
             }
         }
@@ -297,7 +297,7 @@ namespace IslandGatherers.Framework.Objects
             {
                 if (!HasRoomForHarvest())
                 {
-                    _isFull = true;
+                    isFull = true;
                     return;
                 }
 
@@ -338,13 +338,13 @@ namespace IslandGatherers.Framework.Objects
 
                     if (this.addItem(new Object(fruitTree.indexOfFruit, 1, quality: fruitQuality)) != null)
                     {
-                        _ateCrops = true;
+                        ateCrops = true;
                     }
                 }
 
                 fruitTree.fruitsOnTree.Value = 0;
 
-                _harvestedToday = true;
+                harvestedToday = true;
             }
         }
 

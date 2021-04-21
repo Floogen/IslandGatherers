@@ -42,6 +42,7 @@ namespace IslandGatherers
 
                 // Apply our patches
                 new ObjectPatch(monitor).Apply(harmony);
+                new CropPatch(monitor).Apply(harmony);
                 new IslandNorthPatch(monitor).Apply(harmony);
             }
             catch (Exception e)

@@ -59,6 +59,7 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Objects\ParrotPot.cs" />
     <Compile Include="Framework\Patches\IslandNorthPatch.cs" />
+    <Compile Include="Framework\Patches\CropPatch.cs" />
     <Compile Include="Framework\Patches\ObjectPatch.cs" />
     <Compile Include="IslandGatherers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
