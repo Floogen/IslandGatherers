@@ -9,7 +9,11 @@
   "UpdateKeys": [ "Nexus:8552" ],
   "Dependencies": [
     {
-      "UniqueID": "spacechase0.JsonAssets",
+      "UniqueID": "spacechase0.DynamicGameAssets",
+      "IsRequired": true
+    },
+    {
+      "UniqueID": "furyx639.ExpandedStorage",
       "IsRequired": true
     }
   ]
