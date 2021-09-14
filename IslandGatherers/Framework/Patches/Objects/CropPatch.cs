@@ -1,36 +1,38 @@
 ﻿using HarmonyLib;
-using IslandGatherers.Framework.Objects;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Object = StardewValley.Object;
 
-namespace IslandGatherers.Framework.Patches
+namespace IslandGatherers.Framework.Patches.Objects
 {
-    internal class CropPatch
+    internal class CropPatch : PatchTemplate
     {
-        private static IMonitor monitor;
-        private readonly System.Type _object = typeof(Crop);
+        private readonly Type _object = typeof(Crop);
 
-        internal CropPatch(IMonitor modMonitor)
+        internal CropPatch(IMonitor modMonitor, IModHelper modHelper) : base(modMonitor, modHelper)
         {
-            monitor = modMonitor;
+
         }
 
-        internal void Apply(HarmonyInstance harmony)
+        internal void Apply(Harmony harmony)
         {
             harmony.Patch(AccessTools.Method(_object, nameof(Crop.harvest), new[] { typeof(int), typeof(int), typeof(HoeDirt), typeof(JunimoHarvester) }), prefix: new HarmonyMethod(GetType(), nameof(HarvestPrefix)));
         }
 
         [HarmonyPriority(Priority.Low)]
-        private static bool HarvestPrefix(Crop __instance, Vector2 ___tilePosition, int xTile, int yTile, HoeDirt soil, JunimoHarvester junimoHarvester = null)
+        internal static bool HarvestPrefix(Crop __instance, Vector2 ___tilePosition, int xTile, int yTile, HoeDirt soil, JunimoHarvester junimoHarvester = null)
         {
             Object cropObj = new Object(__instance.indexOfHarvest, 1);
             string cropName = "Unknown";
@@ -41,28 +43,28 @@ namespace IslandGatherers.Framework.Patches
 
             if (soil is null)
             {
-                monitor.Log($"Crop ({cropName}) at {xTile}, {yTile} is missing HoeDirt, unable to process!", LogLevel.Trace);
+                _monitor.Log($"Crop ({cropName}) at {xTile}, {yTile} is missing HoeDirt, unable to process!", LogLevel.Trace);
                 return true;
             }
             if (soil.currentLocation is null)
             {
-                monitor.Log($"Crop ({cropName}) at {xTile}, {yTile} is missing currentLocation (bad GameLocation?), unable to process!", LogLevel.Trace);
+                _monitor.Log($"Crop ({cropName}) at {xTile}, {yTile} is missing currentLocation (bad GameLocation?), unable to process!", LogLevel.Trace);
                 return true;
             }
 
-            if (soil.currentLocation.numberOfObjectsWithName("Parrot Pot") == 0)
+            if (!soil.currentLocation.objects.Values.Any(o => o.modData.ContainsKey(IslandGatherers.parrotPotFlag)))
             {
                 return true;
             }
 
-            // If any farmer is in a location with a Parrot Pot and the farmer is not in bed, skip logic
+            // If any farmer is in a location with a Harvest Statue and the farmer is not in bed, skip logic
             if (soil.currentLocation.farmers.Any(f => !f.isInBed))
             {
                 return true;
             }
 
             // Get the nearby HarvestStatue, which will be placing the harvested crop into
-            ParrotPot statueObj = soil.currentLocation.objects.Pairs.First(p => p.Value.Name == "Parrot Pot").Value as ParrotPot;
+            Chest statueObj = soil.currentLocation.objects.Values.First(o => o.modData.ContainsKey(IslandGatherers.parrotPotFlag)) as Chest;
 
             if ((bool)__instance.dead)
             {
@@ -101,7 +103,7 @@ namespace IslandGatherers.Framework.Patches
                 if (statueObj.addItem(o) != null)
                 {
                     // Statue is full, flag it as being eaten
-                    statueObj.ateCrops = true;
+                    statueObj.modData[IslandGatherers.ateCropsFlag] = true.ToString();
                 }
 
                 return false;
@@ -173,7 +175,7 @@ namespace IslandGatherers.Framework.Patches
                     if (statueObj.addItem(harvestedItem.getOne()) != null)
                     {
                         // Statue is full, flag it as being eaten
-                        statueObj.ateCrops = true;
+                        statueObj.modData[IslandGatherers.ateCropsFlag] = true.ToString();
                     }
                     success = true;
                 }
@@ -190,7 +192,7 @@ namespace IslandGatherers.Framework.Patches
                 else
                 {
                     // Statue is full, flag it as being eaten
-                    statueObj.ateCrops = true;
+                    statueObj.modData[IslandGatherers.ateCropsFlag] = true.ToString();
                 }
                 if (success)
                 {
@@ -208,7 +210,7 @@ namespace IslandGatherers.Framework.Patches
                         if (statueObj.addItem(harvestedItem.getOne()) != null)
                         {
                             // Statue is full, flag it as being eaten
-                            statueObj.ateCrops = true;
+                            statueObj.modData[IslandGatherers.ateCropsFlag] = true.ToString();
                         }
                     }
                     if ((int)__instance.indexOfHarvest == 262 && r.NextDouble() < 0.4)
@@ -217,7 +219,7 @@ namespace IslandGatherers.Framework.Patches
                         if (statueObj.addItem(hay_item.getOne()) != null)
                         {
                             // Statue is full, flag it as being eaten
-                            statueObj.ateCrops = true;
+                            statueObj.modData[IslandGatherers.ateCropsFlag] = true.ToString();
                         }
                     }
                     else if ((int)__instance.indexOfHarvest == 771)
@@ -228,7 +230,7 @@ namespace IslandGatherers.Framework.Patches
                             if (statueObj.addItem(mixedSeeds_item.getOne()) != null)
                             {
                                 // Statue is full, flag it as being eaten
-                                statueObj.ateCrops = true;
+                                statueObj.modData[IslandGatherers.ateCropsFlag] = true.ToString();
                             }
                         }
                     }
